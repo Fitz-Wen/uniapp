@@ -17,6 +17,30 @@
 			"style": {
 				"navigationBarTitleText": "我的"
 			}
+		},
+		{
+			"path": "pages/online-apply/online-apply",
+			"style": {
+				"navigationBarTitleText": "在线申请"
+			}
+		},
+		{
+			"path": "pages/news-detail/news-detail",
+			"style": {
+				"navigationBarTitleText": "新闻详情"
+			}
+		},
+		{
+			"path": "pages/mediation-team/mediation-team",
+			"style": {
+				"navigationBarTitleText": "调解队伍"
+			}
+		},
+		{
+			"path": "pages/mediator-detail/mediator-detail",
+			"style": {
+				"navigationBarTitleText": "调解员详情"
+			}
 		}
 	],
 	"globalStyle": {
@@ -37,20 +61,20 @@
 		"list": [
 			{
 			"pagePath": "pages/index/index",
-			"iconPath": "./static/logo.png",
-			"selectedIconPath": "./static/logo.png",
+			"iconPath": "./static/image/icon1-1.png",
+			"selectedIconPath": "./static/image/icon1-2.png",
 			"text": "首页"
 			},
 			{
 				"pagePath": "pages/message/index",
-				"iconPath": "./static/logo.png",
-				"selectedIconPath": "./static/logo.png",
+				"iconPath": "./static/image/icon2-1.png",
+				"selectedIconPath": "./static/image/icon2-2.png",
 				"text": "消息"
 			},
 			{
 				"pagePath": "pages/my/index",
-				"iconPath": "./static/logo.png",
-				"selectedIconPath": "./static/logo.png",
+				"iconPath": "./static/image/icon3-1.png",
+				"selectedIconPath": "./static/image/icon3-2.png",
 				"text": "我的"
 			}
 		]

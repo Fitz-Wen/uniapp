@@ -14,4 +14,5 @@
 
 <style>
 	/*每个页面公共css  全局样式*/
+	@import url("/static/font/font.css");
 </style>
