@@ -1,25 +1,26 @@
 <template>
 	<view class="m-container">
 		<view class="m-hd">
-			<view class="m-hd-avatar"><view class="m-hd-avatar-img" :style="{ backgroundImage: 'url(/static/image/project.png)' }"></view></view>
+			<view class="m-hd-avatar"><view class="m-hd-avatar-img" 
+				:style="{ backgroundImage: `url(${peopleBg})` }"></view></view>
 			<view class="m-hd-cnt">
-				<view class="m-hd-cnt-title">姓名</view>
+				<view class="m-hd-cnt-title">{{data.name}}</view>
 				<view class="m-intro-item-box">
 					<view class="m-intro-item">
 						<view class="m-intro-item-label">调解区域</view>
-						<view class="m-intro-item-value">西安市 蓝田县</view>
+						<view class="m-intro-item-value">{{data.DQBM}}</view>
 					</view>
 					<view class="m-intro-item">
 						<view class="m-intro-item-label">机构认证</view>
-						<view class="m-intro-item-value">白云街道人民调解委员会</view>
+						<view class="m-intro-item-value">{{data.practiceOrg}}</view>
 					</view>
 					<view class="m-intro-item">
 						<view class="m-intro-item-label">擅长领域</view>
-						<view class="m-intro-item-value">邻里纠纷 婚姻纠纷</view>
+						<view class="m-intro-item-value">{{data.expertise}}</view>
 					</view>
 					<view class="m-intro-item">
 						<view class="m-intro-item-label">调解数量</view>
-						<view class="m-intro-item-value">已调解 31</view>
+						<view class="m-intro-item-value">已调解 {{data.sn}}</view>
 					</view>
 				</view>
 			</view>
@@ -27,20 +28,52 @@
 		<view class="m-cnt">
 			<view class="m-cnt-title">个人简介</view>
 			<view class="m-cnt-text">
-				"从事调解工作7年，总计调解案件超过300件，被评为白云街道优秀调解员，被评为蓝田县模范标兵
-				从事调解工作7年，总计调解案件超过300件，被评为白云街道优秀调解员，被评为蓝田县模范标兵"
+				{{data.intro ? data.intro : '暂无简介'}}
 			</view>
 		</view>
 	</view>
 </template>
 
 <script>
+import API from '../../static/js/request.js';
 export default {
 	data() {
-		return {};
+		return {
+			id: undefined,
+			data: {}
+		};
+	},
+	computed: {
+		peopleBg() {
+			const url = 'http://shanxi.tunnel.homolo.org/service/rest/tk.File/'
+			if (this.data.original && this.data.original.portrait) {
+				return `${url}${this.data.original.portrait}/view`
+			} else {
+				return '/static/image/project.png'
+			}
+		}
 	},
 	onLoad(option) {
-		console.log(option);
+		const { id } = option;
+		this.id = id;
+		this.getDetail()
+	},
+	methods: {
+		getDetail() {
+			const param = {
+				id: this.id
+			}
+			API.getMediatorInfo(param).then(res => {
+				if (res.code === '1') {
+					this.data = res.result;
+				} else {
+					uni.showToast({
+						icon: 'none',
+						title: res.description
+					})
+				}
+			})
+		}
 	}
 };
 </script>

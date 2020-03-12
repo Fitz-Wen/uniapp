@@ -86,7 +86,7 @@
 						</view>
 					</view>
 				</view>
-				<view class="m-thematic-cnt-item">
+				<view class="m-thematic-cnt-item" @click="toDetail()">
 					<view class="m-thematic-cnt-item-img" :style="{backgroundImage: 'url(/static/image/project.png)'}"></view>
 					<view class="m-thematic-cnt-item-text">
 						<view class="m-thematic-cnt-item-text-hd">
@@ -113,7 +113,7 @@ export default {
 	methods: {
 		toDetail() {
 			uni.navigateTo({
-				url: '/pages/news-detail/news-detail?id=1'
+				url: '/pages/news-detail/news-detail?id=0ca16c1c979a4895b1ae2a146773182e﻿'
 			})
 		}
 	}
@@ -203,7 +203,7 @@ export default {
 						line-height: 88rpx;
 						text-align: center;
 						border-radius: 50%;
-						background-color: #000;
+						background-color: rgba(0, 0, 0, .2);
 						.iconfont {
 							font-size: 48rpx;
 							color: #fff;

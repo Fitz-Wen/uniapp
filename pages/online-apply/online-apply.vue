@@ -6,8 +6,9 @@
 			<view class="m-case-item-form-item">
 				<text class="m-case-item-form-item-label">纠纷类型</text>
 				<view class="m-case-item-form-item-input">
-					<picker class="m-picker" @change="bindPickerChange" :value="index" :range="array">
-						<view class="m-picker-input">{{ array[index] }}</view>
+					<picker class="m-picker" @change="bindDisCateChange" range-key="name" 
+						:value="disCateindex" :range="disputeCategoryLists">
+						<view class="m-picker-input" v-if="disputeCategoryLists[disCateindex] && disputeCategoryLists[disCateindex]['name']">{{ disputeCategoryLists[disCateindex]['name'] }}</view>
 					</picker>
 					<text class="iconfont arrow-right"></text>
 				</view>
@@ -15,19 +16,31 @@
 			<view class="m-case-item-form-item">
 				<text class="m-case-item-form-item-label">案发区域</text>
 				<view class="m-case-item-form-item-input">
-					<picker class="m-picker" @change="bindPickerChange" :value="index" :range="array">
-						<view class="m-picker-input">{{ array[index] }}</view>
+					<picker class="m-picker" 
+						mode="multiSelector"
+						@columnchange="bindMultiPickerColumnChange" 
+						range-key="name"
+						:value="multiIndex" 
+						:range="multiArray">
+						<view class="m-picker-input">
+							<text v-if="multiArray[0][multiIndex[0]] && multiArray[0][multiIndex[0]]['name']">{{multiArray[0][multiIndex[0]]['name']}},</text>
+							<text v-if="multiArray[1][multiIndex[1]] && multiArray[1][multiIndex[1]]['name']">{{multiArray[1][multiIndex[1]]['name']}}，</text>
+							<text v-if="multiArray[2][multiIndex[2]] && multiArray[2][multiIndex[2]]['name']">{{multiArray[2][multiIndex[2]]['name']}}</text>
+						</view>
 					</picker>
 					<text class="iconfont arrow-right"></text>
 				</view>
 			</view>
 			<view class="m-case-item-form-item">
 				<text class="m-case-item-form-item-label">详细地址</text>
-				<view class="m-case-item-form-item-input"><input class="m-picker" @input="handleAddressChange" /></view>
+				<view class="m-case-item-form-item-input">
+					<input class="m-picker" v-model="formParam.address" />
+				</view>
 			</view>
 			<view class="m-case-item-form-item">
 				<text class="m-case-item-form-item-label">纠纷描述</text>
-				<view class="m-case-item-form-item-input"><input class="m-picker" @input="handleIntroChange" /></view>
+				<view class="m-case-item-form-item-input">
+					<input class="m-picker" v-model="formParam.intro"/></view>
 			</view>
 			<view class="m-case-item-form-item">
 				<view class="m-case-item-form-item-label">
@@ -45,11 +58,14 @@
 			<view class="m-case-item-hd">被申请人</view>
 			<view class="m-case-item-form-item">
 				<text class="m-case-item-form-item-label">姓名</text>
-				<view class="m-case-item-form-item-input"><input class="m-picker" @input="handleNameChange" /></view>
+				<view class="m-case-item-form-item-input">
+					<input class="m-picker" v-model="formParam.name" /></view>
 			</view>
 			<view class="m-case-item-form-item">
 				<text class="m-case-item-form-item-label">联系电话</text>
-				<view class="m-case-item-form-item-input"><input class="m-picker" @input="handleTelChange" /></view>
+				<view class="m-case-item-form-item-input">
+					<input class="m-picker" v-model="formParam.phone" />
+				</view>
 			</view>
 		</view>
 		<!-- 申请人 -->
@@ -57,16 +73,20 @@
 			<view class="m-case-item-hd">被申请人</view>
 			<view class="m-case-item-form-item">
 				<text class="m-case-item-form-item-label">姓名</text>
-				<view class="m-case-item-form-item-input"><input class="m-picker" @input="handleName1Change" /></view>
+				<view class="m-case-item-form-item-input">
+					<input class="m-picker" v-model="formParam.name1" />
+				</view>
 			</view>
 			<view class="m-case-item-form-item">
 				<text class="m-case-item-form-item-label">联系电话</text>
-				<view class="m-case-item-form-item-input"><input class="m-picker" @input="handleTel1Change" /></view>
+				<view class="m-case-item-form-item-input">
+					<input class="m-picker" v-model="formParam.phone1" />
+				</view>
 			</view>
 			<view class="m-case-item-form-item">
 				<text class="m-case-item-form-item-label">验证码</text>
 				<view class="m-case-item-form-item-input">
-					<input class="m-picker" @input="handleCodeChange" />
+					<input class="m-picker" v-model="code" />
 					<view class="m-count" v-if="isCountNum">请{{countNum}}秒后再试</view>
 					<view class="m-code" v-else @click="getCode()">获取验证码</view>
 				</view>
@@ -74,54 +94,74 @@
 		</view>
 		
 		<view class="m-foot">
-			<button type="primary">提交</button>
+			<button type="primary" @click="submit()">提交</button>
 		</view>
 	</view>
 </template>
 
 <script>
+	import API from '../../static/js/request.js';
 export default {
 	data() {
 		return {
-			array: ['中国', '美国', '巴西', '日本'],
-			index: 0,
-			address: '',
-			intro: '',
-			videoSrc: '',
-			name: '',
-			phone: '',
-			name1: '',
-			phone1: '',
+			disputeCategoryLists: [],
+			disCateindex: 0,
 			code:　'',
-			countNum: 10,
-			isCountNum: false
+			countNum: 30,
+			isCountNum: false,
+			
+			multiArray: [[], [], []],
+			multiIndex: [0, 0, 0],
+			dataMap: new Map(),
+			formParam: {
+				disCateType: '',
+				multiIndex: [],
+				address: '',
+				intro: '',
+				name: '',
+				phone: '',
+				name1: '',
+				phone1: ''
+			}
+		};
+	},
+	onLoad() {
+		this.getDisputeCategory();
+		this.getZone();
+		if (uni.getStorageSync('APPLYINFO')) {
+			console.log('__________________', uni.getStorageSync('APPLYINFO'))
+			this.formParam = JSON.parse(uni.getStorageSync('APPLYINFO'));
 		};
 	},
 	methods: {
-		bindPickerChange: function(e) {
-			console.log('picker发送选择改变，携带值为', e.target.value);
-			this.index = e.target.value;
+		bindMultiPickerColumnChange: function(e) {
+			const column = e.detail.column;
+			const value = e.detail.value;
+			console.log('修改的列为：' + e.detail.column + '，值为：' + e.detail.value);
+			switch(column) {
+				case 0: {
+					const id = this.multiArray[0][value].value;
+					this.multiArray[1] = this.dataMap.get(id);
+					this.multiArray[2] = this.dataMap.get(this.multiArray[1][0].value);
+					this.multiIndex.splice(0, 0, value);
+					break;
+				}
+				case 1: {
+					const id = this.multiArray[1][value].value;
+					this.multiArray[2] = this.dataMap.get(id);
+					this.multiIndex.splice(1, 0, value);
+					break;
+				}
+				case 2: {
+					this.multiIndex.splice(2, 0, value);
+					break;
+				}
+				this.$forceUpdate();
+			}
 		},
-		handleAddressChange: function(event) {
-			this.address = event.target.value;
-		},
-		handleIntroChange(event) {
-			this.intro = event.target.value;
-		},
-		handleNameChange(event) {
-			this.name = event.target.value;
-		},
-		handleTelChange(event) {
-			this.phone = event.target.value;
-		},
-		handleName1Change(event) {
-			this.name1 = event.target.value;
-		},
-		handleTel1Change(event) {
-			this.phone1 = event.target.value;
-		},
-		handleCodeChange(event) {
-			this.code = event.target.value;
+		bindDisCateChange(e) {
+			console.log(e.target.value)
+			this.disCateindex = e.target.value;
 		},
 		uploadVideo() {
 			var self = this;
@@ -150,8 +190,77 @@ export default {
 					this.isCountNum = false;
 				}
 			}, 1000)
+		},
+		// 获取纠纷类型
+		getDisputeCategory() {
+			API.getDisputeCategory()
+				.then(res => {
+					const result = res.children;
+					this.disputeCategoryLists = result.map(item => {
+						return {
+							name: item.name,
+							value: item.id
+						}
+					})
+					if (this.formParam.disCateType) {
+						this.disCateindex = this.formParam.disCateType;
+					}
+				})
+		},
+		// 案发区域
+		getZone() {
+			API.getZone().then(res => {
+				console.log(res)
+				const children = res.children;
+				this.getCountMap(children);
+				console.log('----------------------', this.dataMap);
+				this.multiArray[0] = this.dataMap.get('a5e3f072a3fb4bed94925103ba7dc00d');
+				this.multiArray[1] = this.dataMap.get('f27043548e004ee491fd4f2ff338dfb0');
+				this.multiArray[2] = this.dataMap.get('b214e85c94764ce4a686dae1d538ad44');
+				if (this.formParam.multiIndex && this.formParam.multiIndex.length > 0) {
+					this.multiIndex = this.formParam.multiIndex;
+				}
+				this.$forceUpdate();
+			})
+		},
+		getCountMap(children) {
+			const arr = []
+			children.forEach(item => {
+				const obj = {
+					name: item.name,
+					value: item.id
+				}
+				arr.push(obj);
+				this.dataMap.set(item.parentId, arr);
+				if (item.children) {
+					this.getCountMap(item.children);
+				}
+			})
+		},
+		// 提交
+		submit() {
+			if (!this.code) {
+				uni.showToast({
+					icon: 'none',
+					title: '请填写验证码'
+				})
+				return;
+			}
+			this.formParam.disCateType = this.disCateindex;
+			this.formParam.multiIndex = this.multiIndex;
+			console.log(this.formParam)
+			uni.setStorageSync('APPLYINFO', JSON.stringify(this.formParam));
+			uni.showToast({
+				icon: 'success',
+				title: '提交成功'
+			});
+			setTimeout(() => {
+				uni.switchTab({
+					url: '/pages/index/index'
+				});
+			}, 1000)
 		}
- 	}
+	}
 };
 </script>
 
@@ -190,6 +299,7 @@ page {
 				transform: scale(0.5);
 				-webkit-transform-origin: left top;
 				transform-origin: left top;
+				z-index: -1;
 			}
 			&-label {
 				color: #888;
@@ -202,7 +312,6 @@ page {
 				justify-content: space-between;
 				flex: 1;
 				margin-left: 50rpx;
-				z-index: 1000;
 				.m-picker {
 					flex: 1;
 					&-input {
