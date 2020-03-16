@@ -44,6 +44,7 @@ export default {
 		};
 	},
 	computed: {
+		// 调获取解员头像
 		peopleBg() {
 			const url = 'http://shanxi.tunnel.homolo.org/service/rest/tk.File/'
 			if (this.data.original && this.data.original.portrait) {
@@ -59,6 +60,7 @@ export default {
 		this.getDetail()
 	},
 	methods: {
+		// 获取详情
 		getDetail() {
 			const param = {
 				id: this.id

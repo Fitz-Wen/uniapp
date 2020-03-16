@@ -1,32 +1,32 @@
 <template>
 	<view class="m-container">
 		<view class="m-hd">
-			<view class="m-hd-search">
+			<view class="m-hd-search" @click="searchPeople()">
 				<text class="iconfont search"></text>
 				<text class="text">查找调解员</text>
 			</view>
 		</view>
 		<ms-dropdown-menu>
-			<ms-dropdown-item v-model="value1" :list="areaLists" :top="40">
+			<ms-dropdown-item v-model="area" :list="areaLists" :top="0">
 				<view slot="title">
 					<view class="dropdown-item-title">
-						<view class="title">{{ getDisplays(areaLists, value1) }}</view>
+						<view class="title">{{ getDisplays(areaLists, area) }}</view>
 						<view class="iconfont drop-down"></view>
 					</view>
 				</view>
 			</ms-dropdown-item>
-			<ms-dropdown-item v-model="value2" :list="expertiseLists" :top="40">
+			<ms-dropdown-item v-model="exper" :list="expertiseLists" :top="0">
 				<view slot="title">
 					<view class="dropdown-item-title">
-						<view class="title">{{ getDisplays(expertiseLists, value2) }}</view>
+						<view class="title">{{ getDisplays(expertiseLists, exper) }}</view>
 						<view class="iconfont drop-down"></view>
 					</view>
 				</view>
 			</ms-dropdown-item>
-			<ms-dropdown-item v-model="value3" :list="yearLists" :top="40">
+			<ms-dropdown-item v-model="workYear" :list="yearLists" :top="0">
 				<view slot="title">
 					<view class="dropdown-item-title">
-						<view class="title">{{ getDisplays(yearLists, value3) }}</view>
+						<view class="title">{{ getDisplays(yearLists, workYear) }}</view>
 						<view class="iconfont drop-down"></view>
 					</view>
 				</view>
@@ -87,7 +87,7 @@ export default {
 					value: 2
 				}
 			],
-			value1: '区域',
+			area: '区域',
 			expertiseLists: [
 				{
 					text: '全部',
@@ -102,7 +102,7 @@ export default {
 					value: 2
 				}
 			],
-			value2: '擅长领域',
+			exper: '擅长领域',
 			yearLists: [
 				{
 					text: '全部',
@@ -114,10 +114,10 @@ export default {
 				},
 				{
 					text: '3年',
-					value: 2
+					value: 3
 				}
 			],
-			value3: '从业年限',
+			workYear: '从业年限',
 			pageNo: 1,
 			pageCount: void 0,
 			peopleLists: []
@@ -128,33 +128,40 @@ export default {
 	},
 	computed: {
 		valueObj() {
-			const {value1, value2, value3 } = this;
+			const {area, exper, workYear } = this;
 			return {
-				value1,
-				value2,
-				value3
+				area,
+				exper,
+				workYear
 			}
 		}
 	},
 	watch: {
 		valueObj(val) {
-			this.getListsData();
+			this.pageNo = 1;
+			this.getListsData(true);
 		}
 	},
 	methods: {
-		getListsData() {
+		// 获取列表数据
+		getListsData(isReset = false) {
 			const params = {
 				dqbm: '',
 				isBMYYT: false,
 				pageSize: 10,
-				pageNo: this.pageNo
+				pageNo: this.pageNo,
+				lengthService: this.workYear
 			};
 			API.searchMediatorList(params).then(res => {
 				if (res.code === '1') {
 					const data = res.result;
 					const result = data.result;
 					this.pageCount = data.pageCount;
-					this.peopleLists = [...this.peopleLists, ...result];
+					if (isReset) {
+						this.peopleLists = [...result];
+					} else {
+						this.peopleLists = [...this.peopleLists, ...result];
+					}
 				} else {
 					uni.showToast({
 						icon: 'none',
@@ -163,6 +170,7 @@ export default {
 				}
 			});
 		},
+		// 加载更多
 		loadMore() {
 			if (this.pageNo + 1 > this.pageCount) {
 				uni.showToast({
@@ -174,6 +182,7 @@ export default {
 				this.getListsData();
 			}
 		},
+		// 格式化
 		getDisplays(arr, key) {
 			if (arr[key] && arr[key]['text']) {
 				return arr[key]['text'];
@@ -181,13 +190,21 @@ export default {
 				return key;
 			}
 		},
+		// 进入详情
 		toDetail(item) {
 			const id = item.id;
 			uni.navigateTo({
 				url: `/pages/mediator-detail/mediator-detail?id=${id}`
 			});
+		},
+		// 搜索
+		searchPeople() {
+			uni.showToast({
+				icon: 'none',
+				title: '跳转查询页面'
+			})
 		}
-	}
+ 	}
 };
 </script>
 

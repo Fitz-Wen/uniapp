@@ -43,6 +43,7 @@
 			this.getDetail();
 		},
 		methods: {
+			// 获取详情
 			getDetail() {
 				const param = {
 					id: this.id
@@ -59,9 +60,10 @@
 						}
 				})
 			},
+			// 视频时长
 			countTime(str) {
-					const arr = str.split(':');
-					return arr[0] * 60 + Number(arr[1]);
+				const arr = str.split(':');
+				return arr[0] * 60 + Number(arr[1]);
 			}
 		}
 	}

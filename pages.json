@@ -61,20 +61,20 @@
 		"list": [
 			{
 			"pagePath": "pages/index/index",
-			"iconPath": "./static/image/icon1-1.png",
-			"selectedIconPath": "./static/image/icon1-2.png",
+			"iconPath": "/static/image/icon1-1.png",
+			"selectedIconPath": "/static/image/icon1-2.png",
 			"text": "首页"
 			},
 			{
 				"pagePath": "pages/message/index",
-				"iconPath": "./static/image/icon2-1.png",
-				"selectedIconPath": "./static/image/icon2-2.png",
+				"iconPath": "/static/image/icon2-1.png",
+				"selectedIconPath": "/static/image/icon2-2.png",
 				"text": "消息"
 			},
 			{
 				"pagePath": "pages/my/index",
-				"iconPath": "./static/image/icon3-1.png",
-				"selectedIconPath": "./static/image/icon3-2.png",
+				"iconPath": "/static/image/icon3-1.png",
+				"selectedIconPath": "/static/image/icon3-2.png",
 				"text": "我的"
 			}
 		]

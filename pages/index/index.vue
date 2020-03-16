@@ -5,6 +5,7 @@
 			:autoplay="true" 
 			:interval="2000" 
 			:duration="500"
+			:circular="true"
 			indicator-color="#ecedf0"
 			indicator-active-color="#9ea5ba">
 			<swiper-item>
@@ -111,6 +112,7 @@ export default {
 	},
 	onLoad() {},
 	methods: {
+		// 跳转到详情页
 		toDetail() {
 			uni.navigateTo({
 				url: '/pages/news-detail/news-detail?id=0ca16c1c979a4895b1ae2a146773182e﻿'

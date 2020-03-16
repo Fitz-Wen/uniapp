@@ -20,12 +20,12 @@
 						mode="multiSelector"
 						@columnchange="bindMultiPickerColumnChange" 
 						range-key="name"
-						:value="multiIndex" 
-						:range="multiArray">
+						:value="zoneSelectIndex" 
+						:range="zoneLists">
 						<view class="m-picker-input">
-							<text v-if="multiArray[0][multiIndex[0]] && multiArray[0][multiIndex[0]]['name']">{{multiArray[0][multiIndex[0]]['name']}},</text>
-							<text v-if="multiArray[1][multiIndex[1]] && multiArray[1][multiIndex[1]]['name']">{{multiArray[1][multiIndex[1]]['name']}}，</text>
-							<text v-if="multiArray[2][multiIndex[2]] && multiArray[2][multiIndex[2]]['name']">{{multiArray[2][multiIndex[2]]['name']}}</text>
+							<text v-if="zoneLists[0][zoneSelectIndex[0]] && zoneLists[0][zoneSelectIndex[0]]['name']">{{zoneLists[0][zoneSelectIndex[0]]['name']}},</text>
+							<text v-if="zoneLists[1][zoneSelectIndex[1]] && zoneLists[1][zoneSelectIndex[1]]['name']">{{zoneLists[1][zoneSelectIndex[1]]['name']}}，</text>
+							<text v-if="zoneLists[2][zoneSelectIndex[2]] && zoneLists[2][zoneSelectIndex[2]]['name']">{{zoneLists[2][zoneSelectIndex[2]]['name']}}</text>
 						</view>
 					</picker>
 					<text class="iconfont arrow-right"></text>
@@ -110,12 +110,12 @@ export default {
 			countNum: 30,
 			isCountNum: false,
 			
-			multiArray: [[], [], []],
-			multiIndex: [0, 0, 0],
+			zoneLists: [[], [], []],
+			zoneSelectIndex: [0, 0, 0],
 			dataMap: new Map(),
 			formParam: {
 				disCateType: '',
-				multiIndex: [],
+				zoneSelectIndex: [],
 				address: '',
 				intro: '',
 				name: '',
@@ -134,35 +134,38 @@ export default {
 		};
 	},
 	methods: {
+		// 案发区域change事件
 		bindMultiPickerColumnChange: function(e) {
 			const column = e.detail.column;
 			const value = e.detail.value;
 			console.log('修改的列为：' + e.detail.column + '，值为：' + e.detail.value);
 			switch(column) {
 				case 0: {
-					const id = this.multiArray[0][value].value;
-					this.multiArray[1] = this.dataMap.get(id);
-					this.multiArray[2] = this.dataMap.get(this.multiArray[1][0].value);
-					this.multiIndex.splice(0, 0, value);
+					const id = this.zoneLists[0][value].value;
+					this.zoneLists[1] = this.dataMap.get(id);
+					this.zoneLists[2] = this.dataMap.get(this.zoneLists[1][0].value);
+					this.zoneSelectIndex.splice(0, 0, value);
 					break;
 				}
 				case 1: {
-					const id = this.multiArray[1][value].value;
-					this.multiArray[2] = this.dataMap.get(id);
-					this.multiIndex.splice(1, 0, value);
+					const id = this.zoneLists[1][value].value;
+					this.zoneLists[2] = this.dataMap.get(id);
+					this.zoneSelectIndex.splice(1, 0, value);
 					break;
 				}
 				case 2: {
-					this.multiIndex.splice(2, 0, value);
+					this.zoneSelectIndex.splice(2, 0, value);
 					break;
 				}
 				this.$forceUpdate();
 			}
 		},
+		// 纠纷类型change事件
 		bindDisCateChange(e) {
 			console.log(e.target.value)
 			this.disCateindex = e.target.value;
 		},
+		// 上传视频
 		uploadVideo() {
 			var self = this;
 			uni.chooseVideo({
@@ -173,6 +176,7 @@ export default {
 				}
 			});
 		},
+		// 获取二维码
 		getCode() {
 			uni.showModal({
 				showCancel: false,
@@ -180,6 +184,7 @@ export default {
 			})
 			this.countNumDown();
 		},
+		// 倒计时
 		countNumDown() {
 			this.isCountNum = true;
 			setTimeout(() => {
@@ -214,15 +219,16 @@ export default {
 				const children = res.children;
 				this.getCountMap(children);
 				console.log('----------------------', this.dataMap);
-				this.multiArray[0] = this.dataMap.get('a5e3f072a3fb4bed94925103ba7dc00d');
-				this.multiArray[1] = this.dataMap.get('f27043548e004ee491fd4f2ff338dfb0');
-				this.multiArray[2] = this.dataMap.get('b214e85c94764ce4a686dae1d538ad44');
-				if (this.formParam.multiIndex && this.formParam.multiIndex.length > 0) {
-					this.multiIndex = this.formParam.multiIndex;
+				this.zoneLists[0] = this.dataMap.get('a5e3f072a3fb4bed94925103ba7dc00d');
+				this.zoneLists[1] = this.dataMap.get('f27043548e004ee491fd4f2ff338dfb0');
+				this.zoneLists[2] = this.dataMap.get('b214e85c94764ce4a686dae1d538ad44');
+				if (this.formParam.zoneSelectIndex && this.formParam.zoneSelectIndex.length > 0) {
+					this.zoneSelectIndex = this.formParam.zoneSelectIndex;
 				}
 				this.$forceUpdate();
 			})
 		},
+		// 数据格式化
 		getCountMap(children) {
 			const arr = []
 			children.forEach(item => {
@@ -247,7 +253,7 @@ export default {
 				return;
 			}
 			this.formParam.disCateType = this.disCateindex;
-			this.formParam.multiIndex = this.multiIndex;
+			this.formParam.zoneSelectIndex = this.zoneSelectIndex;
 			console.log(this.formParam)
 			uni.setStorageSync('APPLYINFO', JSON.stringify(this.formParam));
 			uni.showToast({
