@@ -115,7 +115,7 @@ export default {
 			dataMap: new Map(),
 			formParam: {
 				disCateType: '',
-				zoneSelectIndex: [],
+				zoneSelectIndex: [0, 0, 0],
 				address: '',
 				intro: '',
 				name: '',
@@ -219,12 +219,18 @@ export default {
 				const children = res.children;
 				this.getCountMap(children);
 				console.log('----------------------', this.dataMap);
-				this.zoneLists[0] = this.dataMap.get('a5e3f072a3fb4bed94925103ba7dc00d');
-				this.zoneLists[1] = this.dataMap.get('f27043548e004ee491fd4f2ff338dfb0');
-				this.zoneLists[2] = this.dataMap.get('b214e85c94764ce4a686dae1d538ad44');
+				
+				// this.zoneLists[1] = this.dataMap.get('f27043548e004ee491fd4f2ff338dfb0');
+				// this.zoneLists[2] = this.dataMap.get('b214e85c94764ce4a686dae1d538ad44');
 				if (this.formParam.zoneSelectIndex && this.formParam.zoneSelectIndex.length > 0) {
 					this.zoneSelectIndex = this.formParam.zoneSelectIndex;
 				}
+				const first = children[this.formParam.zoneSelectIndex[0]]
+				const second = first.children[this.formParam.zoneSelectIndex[1]]
+				const third = second.children[this.formParam.zoneSelectIndex[2]]
+				this.zoneLists[0] = this.dataMap.get('a5e3f072a3fb4bed94925103ba7dc00d');
+				this.zoneLists[1] = this.dataMap.get(first.id);
+				this.zoneLists[2] = this.dataMap.get(second.id);
 				this.$forceUpdate();
 			})
 		},

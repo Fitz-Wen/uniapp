@@ -1,9 +1,12 @@
 <template>
 	<view class="m-container">
 		<view class="m-hd">
-			<view class="m-hd-search" @click="searchPeople()">
+			<view class="m-hd-search" v-if="isShowSearch" @click="isShowSearch = false">
 				<text class="iconfont search"></text>
 				<text class="text">查找调解员</text>
+			</view>
+			<view v-else class="m-hd-search">
+				<input type="text" v-model="name" @blur="searchPeople()" @confirm="searchPeople()"/>
 			</view>
 		</view>
 		<ms-dropdown-menu>
@@ -120,7 +123,9 @@ export default {
 			workYear: '从业年限',
 			pageNo: 1,
 			pageCount: void 0,
-			peopleLists: []
+			peopleLists: [],
+			name: undefined,
+			isShowSearch: true
 		};
 	},
 	onLoad() {
@@ -140,6 +145,11 @@ export default {
 		valueObj(val) {
 			this.pageNo = 1;
 			this.getListsData(true);
+		},
+		name(val) {
+			if (val.length === 0) {
+				this.isShowSearch = true;
+			}
 		}
 	},
 	methods: {
@@ -150,6 +160,7 @@ export default {
 				isBMYYT: false,
 				pageSize: 10,
 				pageNo: this.pageNo,
+				name: this.name,
 				lengthService: this.workYear
 			};
 			API.searchMediatorList(params).then(res => {
@@ -199,10 +210,7 @@ export default {
 		},
 		// 搜索
 		searchPeople() {
-			uni.showToast({
-				icon: 'none',
-				title: '跳转查询页面'
-			})
+			this.getListsData(true);
 		}
  	}
 };

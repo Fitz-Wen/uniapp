@@ -27,7 +27,7 @@
 					</view>
 					服务
 				</view>
-				<view class="m-service-hd-rt">服务指南 <text class="iconfont arrow-right"></text></view>
+				<!-- s -->
 			</view>
 			<view class="m-service-lists">
 				<navigator class="m-service-lists-item" url="/pages/online-apply/online-apply">
@@ -38,14 +38,14 @@
 							在线调解
 						</view>
 				</navigator>
-				<view class="m-service-lists-item blue">
+				<!-- <view class="m-service-lists-item blue">
 					<view class="m-service-lists-item-icon">
 						<text class="iconfont consulting"></text>
 					</view>
 					<view class="m-service-lists-item-title">
 						留言咨询
 					</view>
-				</view>
+				</view> -->
 				<navigator class="m-service-lists-item light-green" url="/pages/mediation-team/mediation-team">
 					<view class="m-service-lists-item-icon">
 						<text class="iconfont team"></text>
@@ -164,7 +164,7 @@ export default {
 		&-lists {
 			display: flex;
 			align-items: center;
-			justify-content: space-around;
+			justify-content: space-between;
 			margin-top: 30rpx;
 			&-item {
 				position: relative;
@@ -172,8 +172,8 @@ export default {
 				align-items: center;
 				justify-content: center;
 				flex-direction: column;
-				width: 210rpx;
-				height: 210rpx;
+				width: 330rpx;
+				height: 220rpx;
 				color: #fff;
 				font-size: 30rpx;
 				background-color: #2d5afe;
@@ -195,9 +195,15 @@ export default {
 				}
 				&.blue {
 					background-color: #2e87fe;
+					&:active {
+						background-color: rgb(0, 50, 231);
+					}
 				}
 				&.light-green {
 					background-color: #2eadfe;
+					&:active {
+						background-color: rgb(0, 156, 255);
+					}
 				}
 				&-icon {
 						width: 88rpx;

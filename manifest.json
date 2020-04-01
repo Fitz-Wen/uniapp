@@ -136,6 +136,14 @@
     "h5" : {
         "uniStatistics" : {
             "enable" : false
+        },
+        "router" : {
+            "mode" : "hash"
+        },
+        "optimization" : {
+            "treeShaking" : {
+                "enable" : true
+            }
         }
     },
     "mp-qq" : {
