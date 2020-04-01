@@ -6,7 +6,11 @@
 				<text class="text">查找调解员</text>
 			</view>
 			<view v-else class="m-hd-search">
-				<input type="text" v-model="name" @blur="searchPeople()" @confirm="searchPeople()"/>
+				<input class="m-input" 
+					style="width: 100%;padding-left: 24rpx;"
+					type="text" 
+					focus
+					v-model="name" @blur="searchPeople()" @confirm="searchPeople()"/>
 			</view>
 		</view>
 		<ms-dropdown-menu>
@@ -210,7 +214,9 @@ export default {
 		},
 		// 搜索
 		searchPeople() {
-			this.getListsData(true);
+			if (this.name) {
+				this.getListsData(true);
+			}
 		}
  	}
 };
@@ -237,6 +243,9 @@ page {
 			.search {
 				font-size: 40rpx;
 				color: #888;
+				.m-input {
+					width: 100%;
+				}
 			}
 			.text {
 				padding-left: 24rpx;
