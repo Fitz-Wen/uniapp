@@ -1,5 +1,8 @@
 <template>
 	<view class="m-container">
+		<view class="m-header-box">
+			
+
 		<view class="m-hd">
 			<view class="m-hd-search" v-if="isShowSearch" @click="isShowSearch = false">
 				<text class="iconfont search"></text>
@@ -39,7 +42,11 @@
 				</view>
 			</ms-dropdown-item>
 		</ms-dropdown-menu>
-		<view class="m-empty-box" v-if="peopleLists.length === 0"><view class="m-empty" :style="{ backgroundImage: 'url(/static/image/State_empty.png)' }"></view></view>
+		</view>
+		<view class="m-empty-box" v-if="peopleLists.length === 0">
+			<view class="m-empty" :style="{ backgroundImage: 'url(/static/image/State_empty.png)' }"></view>
+			<view class="m-empty-text">空列表</view>
+		</view>
 		<template v-else>
 			<scroll-view scroll-y class="m-people-lists" :lower-threshold="200" @scrolltolower="loadMore()">
 				<view class="m-people-lists-item" v-for="(item, index) in peopleLists" :key="index" @click="toDetail(item)">
@@ -229,7 +236,15 @@ page {
 }
 .m-container {
 	position: relative;
+	padding-top: 210rpx;
 	height: 100%;
+	box-sizing: border-box;
+	.m-header-box {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+	}
 	.m-hd {
 		padding: 0 40rpx;
 		padding-top: 20rpx;
@@ -264,9 +279,8 @@ page {
 		}
 	}
 	.m-people-lists {
-		height: calc(100vh - 290rpx);
-		margin-top: 10rpx;
-		// padding-bottom: 10rpx;
+		height: 100%;
+		// margin-top: 10rpx;
 		background-color: #fff;
 		overflow-y: auto;
 		&-item {
@@ -283,8 +297,8 @@ page {
 				box-sizing: border-box;
 				width: 200%;
 				height: 200%;
-				-webkit-transform: scale(0.5);
-				transform: scale(0.5);
+				-webkit-transform: scale(.5);
+				transform: scale(.5);
 				-webkit-transform-origin: left top;
 				transform-origin: left top;
 			}
@@ -321,8 +335,8 @@ page {
 							box-sizing: border-box;
 							width: 200%;
 							height: 200%;
-							-webkit-transform: scale(0.5);
-							transform: scale(0.5);
+							-webkit-transform: scale(.5);
+							transform: scale(.5);
 							-webkit-transform-origin: left top;
 							transform-origin: left top;
 						}
@@ -354,6 +368,12 @@ page {
 			background-position: center;
 			background-size: cover;
 			background-repeat: no-repeat;
+		}
+		.m-empty-text {
+			margin-top: 60rpx;
+			color: #9ea5ba;
+			fontSize: 28rpx;
+			text-align: center;
 		}
 	}
 }

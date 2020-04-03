@@ -1,8 +1,11 @@
 <template>
 	<view class="m-container">
 		<view class="m-hd">
-			<view class="m-hd-avatar"><view class="m-hd-avatar-img" 
-				:style="{ backgroundImage: `url(${peopleBg})` }"></view></view>
+			<view class="m-hd-avatar">
+				<view class="m-hd-avatar-img-box">
+					<view class="m-hd-avatar-img" :style="{ backgroundImage: `url(${peopleBg})` }"></view>
+				</view>
+			</view>
 			<view class="m-hd-cnt">
 				<view class="m-hd-cnt-title">{{data.name}}</view>
 				<view class="m-intro-item-box">
@@ -90,15 +93,21 @@ page {
 .m-hd {
 	&-avatar {
 		position: relative;
-		&-img {
+		&-img-box {
 			width: 244rpx;
 			height: 324rpx;
+			padding: 6rpx;
 			margin: 0 auto;
 			margin-top: 60rpx;
+			background-color: #eee;
+		}
+		&-img {
+			width: 100%;
+			height: 100%;
 		}
 	}
 	&-cnt {
-		height: 400rpx;
+		// height: 400rpx;
 		margin-top: -225rpx;
 		padding-top: 260rpx;
 		background-color: #fff;
@@ -111,6 +120,7 @@ page {
 		.m-intro-item-box {
 			padding: 0 60rpx;
 			padding-top: 44rpx;
+			padding-bottom: 60rpx;
 		}
 		.m-intro-item {
 			display: flex;
@@ -133,8 +143,8 @@ page {
 					box-sizing: border-box;
 					width: 200%;
 					height: 200%;
-					-webkit-transform: scale(0.5);
-					transform: scale(0.5);
+					-webkit-transform: scale(.5);
+					transform: scale(.5);
 					-webkit-transform-origin: left top;
 					transform-origin: left top;
 				}

@@ -1,24 +1,18 @@
 <template>
 	<view class="m-container">
-		<swiper class="m-swiper" 
-			:indicator-dots="true" 
-			:autoplay="true" 
-			:interval="2000" 
-			:duration="500"
-			:circular="true"
-			indicator-color="#ecedf0"
-			indicator-active-color="#9ea5ba">
-			<swiper-item>
-				<view class="m-banner-item" :style="{backgroundImage: 'url(/static/image/home_banner.png)'}"></view>
-			</swiper-item>
-			<swiper-item>
-				<view class="m-banner-item" :style="{backgroundImage: 'url(/static/image/home_banner.png)'}"></view>
-			</swiper-item>
-			<swiper-item>
-				<view class="m-banner-item" :style="{backgroundImage: 'url(/static/image/home_banner.png)'}"></view>
-			</swiper-item>
-		</swiper>
-		
+		<uni-swiper-dot :info="info" :current="current" :dotsStyles="dotsStyles">
+			<swiper class="m-swiper" 
+				:autoplay="true" 
+				:interval="2000" 
+				:duration="500"
+				:circular="true"
+				@change="swiperChange"
+				>
+				<swiper-item v-for="(item, index) in info" :key="index">
+					<view class="m-banner-item" :style="{backgroundImage: 'url(' + item.url + ')'}"></view>
+				</swiper-item>
+			</swiper>
+		</uni-swiper-dot>
 		<view class="m-service">
 			<view class="m-service-hd">
 				<view class="m-service-hd-lf">
@@ -104,11 +98,30 @@
 </template>
 
 <script>
+import { uniSwiperDot } from '@dcloudio/uni-ui'
 export default {
 	data() {
 		return {
-			title: 'Hello'
+			title: 'Hello',
+			info: [
+				{
+					url: '/static/image/home_banner.png'
+				},
+				{
+					url: '/static/image/home_banner.png'
+				}
+			],
+			current: 0,
+			dotsStyles: {
+				width: 10,
+				bottom: 0,
+				backgroundColor: '#ecedf0',
+				selectedBackgroundColor: '#9ea5ba'
+			}
 		};
+	},
+	components: {
+		uniSwiperDot
 	},
 	onLoad() {},
 	methods: {
@@ -117,6 +130,9 @@ export default {
 			uni.navigateTo({
 				url: '/pages/news-detail/news-detail?id=0ca16c1c979a4895b1ae2a146773182e﻿'
 			})
+		},
+		swiperChange(e) {
+			this.current = e.detail.current;
 		}
 	}
 };
@@ -127,6 +143,8 @@ export default {
 	background-color: #fff;
 	.m-swiper {
 		height: 315rpx;
+		padding: 48rpx 0;
+		box-sizing: border-box;
 	}
 	.m-banner-item {
 		width: 100%;
@@ -177,32 +195,47 @@ export default {
 				color: #fff;
 				font-size: 30rpx;
 				background-color: #2d5afe;
-				box-shadow: 0 16rpx 24rpx rgba(45, 90, 254, 0.4);
-				&::after {
-					content: '';
-					position: absolute;
-					top: 0;
-					left: 0;
-					border: 1px solid #0032e7;
-					-webkit-box-sizing: border-box;
-					box-sizing: border-box;
-					width: 200%;
-					height: 200%;
-					-webkit-transform: scale(0.5);
-					transform: scale(0.5);
-					-webkit-transform-origin: left top;
-					transform-origin: left top;
-				}
+				box-shadow: 0 16rpx 24rpx rgba(45, 90, 254, .4);
 				&.blue {
-					background-color: #2e87fe;
+					background-color: #2d5afe;
 					&:active {
 						background-color: rgb(0, 50, 231);
 					}
+					&::after {
+						content: '';
+						position: absolute;
+						top: 0;
+						left: 0;
+						border: 1px solid #0032e7;
+						-webkit-box-sizing: border-box;
+						box-sizing: border-box;
+						width: 200%;
+						height: 200%;
+						-webkit-transform: scale(.5);
+						transform: scale(.5);
+						-webkit-transform-origin: left top;
+						transform-origin: left top;
+					}
 				}
 				&.light-green {
-					background-color: #2eadfe;
+					background-color: #s2eadfe;
 					&:active {
 						background-color: rgb(0, 156, 255);
+					}
+					&::after {
+						content: '';
+						position: absolute;
+						top: 0;
+						left: 0;
+						border: 1px solid #009cff;
+						-webkit-box-sizing: border-box;
+						box-sizing: border-box;
+						width: 200%;
+						height: 200%;
+						-webkit-transform: scale(.5);
+						transform: scale(.5);
+						-webkit-transform-origin: left top;
+						transform-origin: left top;
 					}
 				}
 				&-icon {
@@ -284,12 +317,16 @@ export default {
 		}
 	}
 }
-.m-swiper /deep/ .uni-swiper-dots-horizontal {
-	left: 10%;
-}
-.m-swiper /deep/ .uni-swiper-dot {
-	width: 50rpx;
-	height: 8rpx;
-	border-radius: 0;
+// .m-swiper /deep/ .uni-swiper-dots-horizontal {
+// 	left: 10%;
+// }
+// .m-swiper /deep/ .uni-swiper-dot {
+// 	width: 50rpx;
+// 	height: 8rpx;
+// 	border-radius: 0;
+// }
+.m-container /deep/ .uni-swiper__dots-box {
+	justify-content: flex-start;
+	padding-left: 24rpx;
 }
 </style>

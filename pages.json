@@ -39,7 +39,7 @@
 		{
 			"path": "pages/mediator-detail/mediator-detail",
 			"style": {
-				"navigationBarTitleText": "调解员详情"
+				"navigationBarTitleText": "调解员介绍"
 			}
 		}
 	],
@@ -55,7 +55,7 @@
 		"borderStyle": "black",
 		"backgroundColor": "#ffffff",
 		"height": "50px",
-		"fontSize": "20px",
+		"fontSize": "10px",
 		"iconWidth": "24px",
 		"spacing": "3px",
 		"list": [

@@ -34,13 +34,18 @@
 			<view class="m-case-item-form-item">
 				<text class="m-case-item-form-item-label">详细地址</text>
 				<view class="m-case-item-form-item-input">
-					<input class="m-picker" v-model="formParam.address" />
+					<view  class="m-picker">
+						<input v-model="formParam.address" />
+					</view>
 				</view>
 			</view>
-			<view class="m-case-item-form-item">
-				<text class="m-case-item-form-item-label">纠纷描述</text>
+			<view class="m-case-item-form-item" style="align-items: flex-start;">
+				<text class="m-case-item-form-item-label" style="width: 128rpx; padding-top: 16rpx;" >纠纷描述</text>
 				<view class="m-case-item-form-item-input">
-					<input class="m-picker" v-model="formParam.intro"/></view>
+					<view class="m-picker">
+						<textarea class="m-textarea"  v-model="formParam.intro" auto-height placeholder="" />
+					</view>
+				</view>
 			</view>
 			<view class="m-case-item-form-item">
 				<view class="m-case-item-form-item-label">
@@ -57,7 +62,7 @@
 		<view class="m-case-item">
 			<view class="m-case-item-hd">被申请人</view>
 			<view class="m-case-item-form-item">
-				<text class="m-case-item-form-item-label">姓名</text>
+				<text class="m-case-item-form-item-label" style="min-width: 128rpx;">姓名</text>
 				<view class="m-case-item-form-item-input">
 					<input class="m-picker" v-model="formParam.name" /></view>
 			</view>
@@ -94,7 +99,7 @@
 		</view>
 		
 		<view class="m-foot">
-			<button type="primary" @click="submit()">提交</button>
+			<button type="primary" @click="submit()" :disabled="!code">提交</button>
 		</view>
 	</view>
 </template>
@@ -107,7 +112,7 @@ export default {
 			disputeCategoryLists: [],
 			disCateindex: 0,
 			code:　'',
-			countNum: 30,
+			countNum: 10,
 			isCountNum: false,
 			
 			zoneLists: [[], [], []],
@@ -129,7 +134,6 @@ export default {
 		this.getDisputeCategory();
 		this.getZone();
 		if (uni.getStorageSync('APPLYINFO')) {
-			console.log('__________________', uni.getStorageSync('APPLYINFO'))
 			this.formParam = JSON.parse(uni.getStorageSync('APPLYINFO'));
 		};
 	},
@@ -144,21 +148,27 @@ export default {
 					const id = this.zoneLists[0][value].value;
 					this.zoneLists[1] = this.dataMap.get(id);
 					this.zoneLists[2] = this.dataMap.get(this.zoneLists[1][0].value);
-					this.zoneSelectIndex.splice(0, 0, value);
+					this.zoneSelectIndex.splice(0, 1, value);
+					this.zoneSelectIndex.splice(1, 1, 0);
+					this.zoneSelectIndex.splice(2, 1, 0);
+					console.log(this.zoneSelectIndex);
 					break;
 				}
 				case 1: {
 					const id = this.zoneLists[1][value].value;
 					this.zoneLists[2] = this.dataMap.get(id);
-					this.zoneSelectIndex.splice(1, 0, value);
+					this.zoneSelectIndex.splice(1, 1, value);
+					this.zoneSelectIndex.splice(2, 1, 0);
+					console.log(this.zoneSelectIndex);
 					break;
 				}
 				case 2: {
-					this.zoneSelectIndex.splice(2, 0, value);
+					this.zoneSelectIndex.splice(2, 1, value);
+					console.log(this.zoneSelectIndex);
 					break;
 				}
-				this.$forceUpdate();
 			}
+			this.$forceUpdate();
 		},
 		// 纠纷类型change事件
 		bindDisCateChange(e) {
@@ -192,6 +202,7 @@ export default {
 				if (this.countNum > 0) {
 					this.countNumDown();
 				} else {
+					this.countNum = 10;
 					this.isCountNum = false;
 				}
 			}, 1000)
@@ -294,25 +305,10 @@ page {
 			position: relative;
 			display: flex;
 			align-items: center;
-			height: 96rpx;
+			min-height: 96rpx;
 			padding: 0 30rpx;
 			background-color: #fff;
-			&::after {
-				content: '';
-				position: absolute;
-				top: 0;
-				left: 0;
-				border-bottom: 1px solid #e5e5e5;
-				-webkit-box-sizing: border-box;
-				box-sizing: border-box;
-				width: 200%;
-				height: 200%;
-				-webkit-transform: scale(0.5);
-				transform: scale(0.5);
-				-webkit-transform-origin: left top;
-				transform-origin: left top;
-				z-index: -1;
-			}
+			box-shadow: 0 0 0 1px #e5e5e5;
 			&-label {
 				color: #888;
 				font-size: 32rpx;
@@ -349,5 +345,9 @@ page {
 	.m-foot {
 		padding: 80rpx 40rpx 50rpx 40rpx;
 	}
+}
+.m-textarea {
+	width: 100%;
+	padding: 16rpx 0;
 }
 </style>
